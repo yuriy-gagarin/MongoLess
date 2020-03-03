@@ -2,8 +2,8 @@ package a14e
 
 import a14e.bson.decoder.{BsonDecoder, EnumUnsafeDecoder, GenericBsonDecoders}
 import a14e.bson.encoder.{BsonEncoder, GenericBsonEncoders}
-import com.mongodb.async.client.MongoClients
 import org.bson.{BsonArray, BsonDocument, BsonValue, Document}
+import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY
 
 import scala.collection.JavaConverters._
 import scala.language.implicitConversions
@@ -23,7 +23,7 @@ package object bson {
 
   implicit def documentToRichBsonTry(document: Document): RichBsonTryValue = {
     val bsonValueTry = Try {
-      document.toBsonDocument(classOf[BsonDocument], MongoClients.getDefaultCodecRegistry)
+      document.toBsonDocument(classOf[BsonDocument], DEFAULT_CODEC_REGISTRY)
     }
     new RichBsonTryValue(bsonValueTry)
   }

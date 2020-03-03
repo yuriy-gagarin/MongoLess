@@ -47,6 +47,11 @@ trait GenericBsonDecoders {
                                                                           reprWrites: Lazy[BsonDecoder[Repr]]): BsonDecoder[T] =
     BsonDecoder((obj: BsonValue) => reprWrites.value.decode(obj).map(x => lgen.from(x)))
 
+  implicit def valueClassBsonDecoder[A, R](
+    implicit
+    gen: Lazy[Generic.Aux[A, R :: HNil]],
+    reprWrites: Lazy[BsonDecoder[R]]): BsonDecoder[A] =
+    BsonDecoder((obj: BsonValue) => reprWrites.value.decode(obj).map(x => gen.value.from(x :: HNil)))
 
 
 }

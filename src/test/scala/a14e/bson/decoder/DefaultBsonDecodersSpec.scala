@@ -315,5 +315,6 @@ class DefaultBsonDecodersSpec extends FlatSpec with Matchers {
 
     isFailure shouldBe true
   }
+
 }
 

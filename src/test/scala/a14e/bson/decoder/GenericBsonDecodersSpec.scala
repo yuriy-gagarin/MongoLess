@@ -5,7 +5,8 @@ import a14e.bson._
 import a14e.bson.auto._
 import org.scalatest.{FlatSpec, Matchers}
 import BsonDecoder._
-import org.bson.BsonString
+import org.bson.{BsonString, BsonValue}
+import org.mongodb.scala.bson.{BsonDocument, BsonInt32}
 
 import scala.util.Success
 
@@ -27,6 +28,9 @@ case class NamedNode(nodeName: String,
 
 case class ClassWithList(sequence: List[Int])
 case class ClassWithVector(sequence: Vector[Int])
+
+case class UserId(value: Int) extends AnyVal
+case class Record(userId: UserId)
 
 class GenericBsonDecodersSpec extends FlatSpec with Matchers {
 
@@ -167,5 +171,12 @@ class GenericBsonDecodersSpec extends FlatSpec with Matchers {
 
     bson.as[ClassWithList] shouldBe nodeWithList
     bson.as[ClassWithVector] shouldBe nodeWithVector
+  }
+
+  it should "encode value classes properly" in {
+    val record = UserId(42)
+    val bson = new BsonInt32(42)
+2
+    bson.as[UserId](valueClassBsonDecoder[UserId, Int]) shouldBe record
   }
 }

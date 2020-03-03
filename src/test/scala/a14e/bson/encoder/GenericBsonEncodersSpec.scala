@@ -1,10 +1,12 @@
 package a14e.bson.encoder
 
 import Gender.{Gender, Value}
-import a14e.bson.decoder.BsonDecoder
+import a14e.bson.auto._
+import a14e.bson.decoder.{BsonDecoder, UserId}
 import org.scalatest.{FlatSpec, Matchers}
 import a14e.bson.{Bson, ID, auto}
 import org.bson.BsonNull
+import org.mongodb.scala.bson.BsonInt32
 
 
 case class SampleUser(id: ID[Int],
@@ -231,4 +233,10 @@ class GenericBsonEncodersSpec extends FlatSpec with Matchers {
 
   }
 
+  it should "decode value classes properly" in {
+    val record = UserId(42)
+    val bson = new BsonInt32(42)
+
+    record.asBson(valueClassBsonEncoder[UserId, Int]) shouldBe bson
+  }
 }
