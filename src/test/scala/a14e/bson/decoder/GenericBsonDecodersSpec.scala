@@ -5,6 +5,7 @@ import a14e.bson._
 import a14e.bson.auto._
 import org.scalatest.{FlatSpec, Matchers}
 import BsonDecoder._
+import a14e.bson.encoder.BsonEncoder
 import org.bson.{BsonString, BsonValue}
 import org.mongodb.scala.bson.{BsonDocument, BsonInt32}
 
@@ -176,7 +177,9 @@ class GenericBsonDecodersSpec extends FlatSpec with Matchers {
   it should "encode value classes properly" in {
     val record = UserId(42)
     val bson = new BsonInt32(42)
-2
-    bson.as[UserId](valueClassBsonDecoder[UserId, Int]) shouldBe record
+
+    implicit val userIdDecoder: BsonDecoder[UserId] = valueClassBsonDecoder
+
+    bson.as[UserId] shouldBe record
   }
 }

@@ -47,7 +47,7 @@ trait GenericBsonEncoders {
                                                                           reprWrites: Lazy[BsonEncoder[Repr]]): BsonEncoder[T] =
     (obj: T) => reprWrites.value.encode(lgen.to(obj))
 
-  implicit def valueClassBsonEncoder[A, R](
+  def valueClassBsonEncoder[A, R](
     implicit
     gen: Lazy[Generic.Aux[A, R :: HNil]],
     reprWrites: Lazy[BsonEncoder[R]]): BsonEncoder[A] =

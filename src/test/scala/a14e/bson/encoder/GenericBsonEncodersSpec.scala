@@ -237,6 +237,8 @@ class GenericBsonEncodersSpec extends FlatSpec with Matchers {
     val record = UserId(42)
     val bson = new BsonInt32(42)
 
-    record.asBson(valueClassBsonEncoder[UserId, Int]) shouldBe bson
+    implicit val userIdDecoder: BsonEncoder[UserId] = valueClassBsonEncoder
+
+    record.asBson shouldBe bson
   }
 }
